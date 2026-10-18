@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Octopus Trading Terminal</title>
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --card-bg: #121824;
+      --accent-cyan: #00f2ff;
+      --accent-green: #00e676;
+      --accent-red: #ff1744;
+      --text-main: #f0f4f8;
+      --text-muted: #64748b;
+      --border-color: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Top Navigation Header */
+    header {
+      background: #0f172a;
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--accent-cyan);
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #00f2ff, #3b82f6);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .account-balance {
+      text-align: right;
+    }
+
+    .balance-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .balance-amount {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    /* Main Grid Layout */
+    .app-container {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    @media (max-width: 850px) {
+      .app-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        overflow-y: auto;
+      }
+    }
+
+    /* Chart & Trading Section */
+    .chart-section {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .asset-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card-bg);
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .asset-price {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .payout-badge {
+      background: rgba(0, 230, 118, 0.15);
+      color: var(--accent-green);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+
+    /* Pocket Broker Style Area Chart Canvas */
+    .chart-wrapper {
+      flex: 1;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+      min-height: 320px;
+    }
+
+    canvas#pocketChart {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Quick Action Trade Buttons */
+    .trade-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn-trade {
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s ease, filter 0.2s ease;
+    }
+
+    .btn-trade:active {
+      transform: scale(0.98);
+    }
+
+    .btn-higher {
+      background: linear-gradient(135deg, #00e676, #00b0ff);
+      box-shadow: 0 4px 20px rgba(0, 230, 118, 0.3);
+    }
+
+    .btn-lower {
+      background: linear-gradient(135deg, #ff1744, #f50057);
