@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pocket Broker</title>
   <!-- Lightweight Charts CDN -->
-  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -48,7 +48,7 @@
       font-weight: bold;
     }
 
-    /* Primary Chart Container Fix */
+    /* Fixed Height Chart Box */
     #chart-container {
       flex: 1;
       width: 100%;
@@ -154,33 +154,26 @@
   </div>
 
   <script>
-    // Initialize Chart
-    const container = document.getElementById('chart-container');
-    const chart = LightweightCharts.createChart(container, {
-      width: container.clientWidth,
-      height: container.clientHeight,
-      layout: {
-        backgroundColor: '#0e1118',
-        textColor: '#d1d4dc',
-      },
-      grid: {
-        vertLines: { color: '#1f2937' },
-        horzLines: { color: '#1f2937' },
-      },
-      timeScale: {
-        timeVisible: true,
-        secondsVisible: true,
-      },
-    });
+    // Define interactive trade functions globally
+    let balance = 10000.00;
+    function placeTrade(direction) {
+      const amountInput = document.getElementById('trade-amount');
+      const amount = parseFloat(amountInput.value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid amount');
+        return;
+      }
+      if (amount > balance) {
+        alert('Insufficient funds!');
+        return;
+      }
+      balance -= amount;
+      document.getElementById('balance-amount').innerText = `$${balance.toFixed(2)}`;
+    }
 
-    const lineSeries = chart.addLineSeries({
-      color: '#00e676',
-      lineWidth: 2,
-    });
-
-    // Simulated Real-time Data Feed
-    let currentPrice = 100.00;
-    let currentTime = Math.floor(Date.now() / 1000);
-
-    function generateTick() {
-      const change = (Math.random() - 0.49) * 0.5;
+    // Chart Setup on Window Load
+    window.addEventListener('load', () => {
+      const container = document.getElementById('chart-container');
+      
+      const width = container.clientWidth || window.innerWidth;
+      const height = container.clientHeight ||
